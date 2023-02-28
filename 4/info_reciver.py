@@ -17,9 +17,8 @@ print('waiting for message')
 
 def callback(ch,method,properties,body):
     print(f"{method.routing_key}, {body}")   
-    ch.basic_ack(delivery_tag = method.delivery_tag)
 
 
-ch.basic_consume(queue=queue_name, on_message_callback=callback)
+ch.basic_consume(queue=queue_name, on_message_callback=callback,auto_ack=True)
 
 ch.start_consuming()
