@@ -17,10 +17,11 @@ class Sender:
     def call(self,n):
         self.response = None
         self.coor_id = str(uuid.uuid4())
-        self.ch.basic_publish(exchange='',routing_key='rpc_queue',
+        send.ch.basic_publish(exchange='',routing_key='rpc_queue',
         properties=pika.BasicProperties(reply_to=self.queue_name,correlation_id=self.coor_id),body=str(n))                      
+       
         while self.response is None:
-            self.connection.process_data_events
+            self.connection.process_data_events()
         return int(self.response)
 
 
