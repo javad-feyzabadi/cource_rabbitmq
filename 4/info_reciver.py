@@ -3,11 +3,11 @@ import pika
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 ch = connection.channel()
-ch.exchange_declare(exchange='direct_logs',exchange_type='fanout')
+ch.exchange_declare(exchange='direct_logs',exchange_type='direct')
 
 result = ch.queue_declare(queue='',exclusive=True)
 
-queue_name=result.method.queue
+queue_name=result.method.queue 
 # 3 message
 severities = ('info','warning','error')
 # becuse we have 3 message,  we shuld have 3 bind
