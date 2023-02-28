@@ -3,18 +3,20 @@ import pika
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 ch = connection.channel()
-# create exchange => type = fanout
-ch.exchange_declare(exchange='logs',exchange_type='fanout')
-# create q => exclusive is default false  
+ch.exchange_declare(exchange='direct_logs',exchange_type='fanout')
+
 result = ch.queue_declare(queue='',exclusive=True)
-#queue name
+
 queue_name=result.method.queue
-# binding , queue = queue name
-ch.queue_bind(exchange='logs',queue=queue_name)
-print('waiting for logs')
+# 3 message
+severities = ('info','warning','error')
+# becuse we have 3 message,  we shuld have 3 bind
+for severity in severities:
+    ch.queue_bind(exchange='direct_logs',queue=queue_name,routing_key=severity)
+print('waiting for message')
 
 def callback(ch,method,properties,body):
-    print(f"Recived {body}")
+    print(f"{method.routing_key}, {body}")   
     ch.basic_ack(delivery_tag = method.delivery_tag)
 
 
