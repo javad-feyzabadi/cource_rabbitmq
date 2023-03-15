@@ -1,5 +1,6 @@
 import pika
 
+
 connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 ch2 = connection.channel()
 ch2.queue_declare('hello')
